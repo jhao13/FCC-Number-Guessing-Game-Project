@@ -11,12 +11,12 @@ USERNAME_RESULT=$($PSQL "SELECT username FROM users WHERE username='$USERNAME'")
 # get user id
 USER_ID_RESULT=$($PSQL "SELECT user_id FROM users WHERE username='$USERNAME'")
 
-# if player is not found
+# if user is not found
 if [[ -z $USERNAME_RESULT ]]
   then
-    # greet player
+    # messahe for first timers
     echo -e "\nWelcome, $USERNAME! It looks like this is your first time here.\n"
-    # add player to database
+    # add user to database
     INSERT_USERNAME_RESULT=$($PSQL "INSERT INTO users(username) VALUES ('$USERNAME')")
     
   else
@@ -28,10 +28,10 @@ fi
 # generate random number between 1 and 1000
 SECRET_NUMBER=$(( RANDOM % 1000 + 1 ))
 
-# variable to store number of guesses/tries
+# variable to store number of guesses/tries made by user
 GUESS_COUNT=0
 
-# prompt first guess
+# prompt for first guess from user
 echo "Guess the secret number between 1 and 1000:"
 read USER_GUESS
 
@@ -40,7 +40,7 @@ read USER_GUESS
 until [[ $USER_GUESS == $SECRET_NUMBER ]]
 do
   
-  # check guess is valid/an integer
+  # check if guess is valid/an integer
   if [[ ! $USER_GUESS =~ ^[0-9]+$ ]]
     then
       # request valid guess
@@ -51,7 +51,7 @@ do
     
     # if its a valid guess
     else
-      # check inequalities and give hint
+      # check if number is less than or greater than and give hints
       if [[ $USER_GUESS < $SECRET_NUMBER ]]
         then
           echo "It's higher than that, guess again:"
@@ -68,13 +68,13 @@ do
 
 done
 
-# loop ends when guess is correct so, update guess
+# loop ends when guess is correct so, increment guess one last time
 ((GUESS_COUNT++))
 
 # get user id
 USER_ID_RESULT=$($PSQL "SELECT user_id FROM users WHERE username='$USERNAME'")
-# add result to game history/database
+# add result to games table/database
 INSERT_GAME_RESULT=$($PSQL "INSERT INTO games(user_id, secret_number, guesses) VALUES ($USER_ID_RESULT, $SECRET_NUMBER, $GUESS_COUNT)")
 
-# winning message
+# final winning message
 echo You guessed it in $GUESS_COUNT tries. The secret number was $SECRET_NUMBER. Nice job!
