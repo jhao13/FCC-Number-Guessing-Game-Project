@@ -33,34 +33,34 @@ GUESS_COUNT=0
 
 # prompt for first guess from user
 echo "Guess the secret number between 1 and 1000:"
-read NUMBER_GUESS
+read NUM_GUESS
 
 
 # loop to prompt user to guess until correct
-until [[ $NUMBER_GUESS == $SECRET_NUMBER ]]
+until [[ $NUM_GUESS == $SECRET_NUMBER ]]
 do
   
   # check if guess is valid/an integer
-  if [[ ! $NUMBER_GUESS =~ ^[0-9]+$ ]]
+  if [[ ! $NUM_GUESS =~ ^[0-9]+$ ]]
     then
       # request valid guess
       echo -e "\nThat is not an integer, guess again:"
-      read NUMBER_GUESS
+      read NUM_GUESS
       # update guess count
       ((GUESS_COUNT++))
     
     # if its a valid guess
     else
       # check if number is less than or greater than and give hints
-      if [[ $NUMBER_GUESS < $SECRET_NUMBER ]]
+      if [[ $NUM_GUESS < $SECRET_NUMBER ]]
         then
           echo "It's higher than that, guess again:"
-          read NUMBER_GUESS
+          read NUM_GUESS
           # update guess count
           ((GUESS_COUNT++))
         else 
           echo "It's lower than that, guess again:"
-          read NUMBER_GUESS
+          read NUM_GUESS
           #update guess count
           ((GUESS_COUNT++))
       fi  
